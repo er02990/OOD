@@ -26,6 +26,8 @@ public class ActualMap extends JFrame {
 	/**
 	 * Create the frame.
 	 */
+	
+
 	public ActualMap(int h, int w) {
 		this.h = h;
 		this.w = w;

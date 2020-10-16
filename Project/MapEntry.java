@@ -81,7 +81,7 @@ public class MapEntry {
 		errMsg.setEditable(false);
 		errMsg.setForeground(Color.RED);
 		errMsg.setBackground(UIManager.getColor("Button.background"));
-		errMsg.setBounds(10, 197, 414, 53);
+		errMsg.setBounds(10, 225, 414, 53);
 		frmCreateAMap.getContentPane().add(errMsg);
 		
 		JButton btnCreate = new JButton("CREATE");
@@ -107,6 +107,23 @@ public class MapEntry {
 		btnCreate.setBounds(170, 171, 89, 23);
 		frmCreateAMap.getContentPane().add(btnCreate);
 		
+		JButton btnGSU = new JButton("GSU");
+		btnGSU.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frmCreateAMap.dispose();
+				GSUMap am = new GSUMap();
+				am.setVisible(true);
+					
+					
+					
+			}
+		});
+		btnGSU.setBounds(170, 200, 89, 23);
+		frmCreateAMap.getContentPane().add(btnGSU);
+		
+		
 	}
+	
+	
 
 }
