@@ -115,7 +115,7 @@ public class MapEntry {
 				am.setVisible(true);
 					
 					
-					
+					//l
 			}
 		});
 		btnGSU.setBounds(170, 200, 89, 23);

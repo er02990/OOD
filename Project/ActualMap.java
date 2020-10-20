@@ -17,7 +17,7 @@ public class ActualMap extends JFrame {
 	private int w;
 	
 	private DeliverRobot[][] map;
-	
+	//l
 
 	/**
 	 * Launch the application.
