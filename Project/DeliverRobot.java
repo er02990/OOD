@@ -1,15 +1,60 @@
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
+import java.io.File;
+
+import javax.imageio.ImageIO;
+
 public class DeliverRobot {
 //this is a delivery robot that can be turned on and off, as well as instructed to move
 //it keeps track of its power state as well as its location via units south and units east of the NW edge of an area
 	private boolean on;
 	private int S;
 	private int E;
+	Rectangle box;
+	Image robotImage;
+	BufferedImage robotSprite;
+	public String name;
+	
 //when created this robot will have a starting position and power state	
-	public DeliverRobot(int S, int E, boolean on) {
-		this.S = S;
-		this.E = E;
+	public DeliverRobot(int S, int E, boolean on, String name) {
+		this.setS(S);
+		this.setE(E);
 		this.on = on;
+		this.name = name;
+		
+		box = new Rectangle(S, E, 50, 50);
+		getImages("res\\robot.png");
 	}
+	
+	//get image method
+	public void getImages(String robotPath) {
+		try {
+			// first load the robot as an image then scale it down then draw it onto a
+			// buffered image
+			Toolkit t = Toolkit.getDefaultToolkit();
+			robotImage = t.getImage(robotPath).getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH);
+			BufferedImage img = ImageIO.read(new File(robotPath));
+			Image image = img.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+			robotSprite = new BufferedImage(50, 50, BufferedImage.TRANSLUCENT);
+			robotSprite.getGraphics().drawImage(image, 0, 0, null);
+		} catch (Exception e) {
+			System.out.println("failed to get robot image");
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 //this method turns the robot on
 //it returns 0 if successful, -1 if it was already on
 	public int turnOn() {
@@ -37,12 +82,12 @@ public class DeliverRobot {
 	public int moveTo(int S, int E) {
 		if (!on)
 			return -2;
-		else if (this.S == S && this.E == E) {
+		else if (this.getS() == S && this.getE() == E) {
 			return -1;
 		}
 		else {
-			this.S = S;
-			this.E = E;
+			this.setS(S);
+			this.setE(E);
 			return 0;
 		}
 	}
@@ -55,7 +100,7 @@ public class DeliverRobot {
 		else if (W <= 0)
 			return -1;
 		else {
-			E -= W;
+			setE(getE() - W);
 			return 0;
 		}
 	}
@@ -68,7 +113,7 @@ public class DeliverRobot {
 		else if (E <= 0)
 			return -1;
 		else {
-			this.E += E;
+			this.setE(this.getE() + E);
 			return 0;
 		}
 	}
@@ -81,7 +126,7 @@ public class DeliverRobot {
 		else if (N <= 0)
 			return -1;
 		else {
-			this.S -= N;
+			this.setS(this.getS() - N);
 			return 0;
 		}
 	}
@@ -94,7 +139,7 @@ public class DeliverRobot {
 		else if (S <= 0)
 			return -1;
 		else {
-			this.S += S;
+			this.setS(this.getS() + S);
 			return 0;
 		}
 	}
@@ -107,8 +152,8 @@ public class DeliverRobot {
 		else if (NE <= 0)
 			return -1;
 		else {
-			S -= NE;
-			E += NE;
+			setS(getS() - NE);
+			setE(getE() + NE);
 			return 0;
 		}
 	}
@@ -121,8 +166,8 @@ public class DeliverRobot {
 		else if (NW <= 0)
 			return -1;
 		else {
-			S -= NW;
-			E -= NW;
+			setS(getS() - NW);
+			setE(getE() - NW);
 			return 0;
 		}
 	}
@@ -135,8 +180,8 @@ public class DeliverRobot {
 		else if (SE <= 0)
 			return -1;
 		else {
-			S += SE;
-			E += SE;
+			setS(getS() + SE);
+			setE(getE() + SE);
 			return 0;
 		}
 	}
@@ -149,9 +194,25 @@ public class DeliverRobot {
 		else if (SW <= 0)
 			return -1;
 		else {
-			S += SW;
-			E -= SW;
+			setS(getS() + SW);
+			setE(getE() - SW);
 			return 0;
 		}
+	}
+
+	public int getE() {
+		return E;
+	}
+
+	public void setE(int e) {
+		E = e;
+	}
+
+	public int getS() {
+		return S;
+	}
+
+	public void setS(int s) {
+		S = s;
 	}
 }

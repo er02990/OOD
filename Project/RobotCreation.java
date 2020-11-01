@@ -10,7 +10,10 @@ import javax.swing.JTextArea;
 import javax.swing.UIManager;
 import java.awt.Color;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
+
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
 public class RobotCreation extends JFrame {
@@ -18,6 +21,7 @@ public class RobotCreation extends JFrame {
 	private JPanel contentPane;
 	private JTextField southField;
 	private JTextField eastField;
+	private JTextField nameField;
 	private DeliverRobot dr;
 
 	/**
@@ -27,10 +31,10 @@ public class RobotCreation extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public RobotCreation(int h, int w, DeliverRobot[][] map) {
+	public RobotCreation(int h, int w, ArrayList<DeliverRobot> robots, JPanel j, JComboBox<String> combox) {
 		setTitle("Create a Robot");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(100, 100, 500, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -46,8 +50,13 @@ public class RobotCreation extends JFrame {
 		contentPane.add(eastField);
 		eastField.setColumns(10);
 		
+		nameField = new JTextField();
+		nameField.setBounds(46, 193, 96, 20);
+		contentPane.add(nameField);
+		nameField.setColumns(10);
+		
 		JRadioButton Power = new JRadioButton("On");
-		Power.setBounds(46, 193, 109, 23);
+		Power.setBounds(46, 230, 109, 23);
 		contentPane.add(Power);
 		
 		JTextArea promptText = new JTextArea();
@@ -71,6 +80,13 @@ public class RobotCreation extends JFrame {
 		unitsEastText.setBounds(152, 137, 116, 49);
 		contentPane.add(unitsEastText);
 		
+		JTextArea botName = new JTextArea();
+		botName.setBackground(UIManager.getColor("Button.background"));
+		botName.setEditable(false);
+		botName.setText("Name of Robot");
+		botName.setBounds(170, 72, 116, 49);
+		contentPane.add(botName);
+		
 		JTextArea errMsg = new JTextArea();
 		errMsg.setForeground(Color.RED);
 		errMsg.setBackground(UIManager.getColor("Button.background"));
@@ -78,30 +94,45 @@ public class RobotCreation extends JFrame {
 		errMsg.setBounds(152, 192, 272, 58);
 		contentPane.add(errMsg);
 		
+		
+		
 		JButton btnCreate = new JButton("CREATE");
 		btnCreate.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
 					int ps = Integer.parseInt(southField.getText());
 					int pe = Integer.parseInt(eastField.getText());
+					String name = nameField.getText();
+			
 					if (ps < 0 || ps >= h || pe < 0 || pe >= w) {
 						errMsg.setText("Invalid input. Position is out of bounds.");
 					}
 					else {
 						RobotFactory rf = RobotFactory.getFactory();
 						if (Power.isSelected()) {
-							dr = rf.makeRobot(ps, pe, true);
+							dr = rf.makeRobot(ps, pe, true, name);
 							
 						}
 						else {
-							dr = rf.makeRobot(ps, pe, false);
+							dr = rf.makeRobot(ps, pe, false, name);
 						}
 						
-						if(map[ps][pe] != null) {
+						boolean taken = false;
+						//checks position
+						for(DeliverRobot var : robots) {
+							if(var.getE() == w && var.getS() == h) {
+								taken = true;
+							}
+						}
+						
+						
+						if(taken) {
 							errMsg.setText("Invalid input. A robot is already located at that\n position.");
 						}
 						else {
-							map[ps][pe] = dr;
+							robots.add(dr);
+							combox.addItem(name);
+							j.repaint();
 							dispose();
 						}
 					}

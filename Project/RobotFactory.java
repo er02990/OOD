@@ -6,6 +6,7 @@ public class RobotFactory {
 	private boolean on;
 	private int S;
 	private int E;
+	private String name;
 	
 	private RobotFactory() {
 		
@@ -21,20 +22,21 @@ public class RobotFactory {
 	
 //a factory can store attributes to be used when making robots
 //this is convenient if multiple robots with the same attributes need to be made
-	public void setAttributes(int S, int E, boolean on) {
+	public void setAttributes(int S, int E, boolean on, String name) {
 		this.S = S;
 		this.E = E;
 		this.on = on;
+		this.name = name;
 	}
 	
 //without any parameters, the factory will produce a robot with the attributes it has stored
 	public DeliverRobot makeRobot() {
-		return new DeliverRobot(S, E, on);
+		return new DeliverRobot(S, E, on, name);
 	}
 
 //with parameters the factory will create a robot with the attributes specified
-	public DeliverRobot makeRobot(int S, int E, boolean on) {
-		return new DeliverRobot(S, E, on);
+	public DeliverRobot makeRobot(int S, int E, boolean on, String name) {
+		return new DeliverRobot(S, E, on, name);
 	}
 
 }
