@@ -19,8 +19,8 @@ public class DeliverRobot {
 	
 //when created this robot will have a starting position and power state	
 	public DeliverRobot(int S, int E, boolean on, String name) {
-		this.setS(S);
-		this.setE(E);
+		this.S = S;
+		this.E = E;
 		this.on = on;
 		this.name = name;
 		
@@ -42,17 +42,7 @@ public class DeliverRobot {
 		} catch (Exception e) {
 			System.out.println("failed to get robot image");
 		}
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	}	
 	
 	
 //this method turns the robot on
@@ -214,5 +204,9 @@ public class DeliverRobot {
 
 	public void setS(int s) {
 		S = s;
+	}
+	
+	public boolean isOn() {
+		return on;
 	}
 }

@@ -33,7 +33,7 @@ public class RobotCreation extends JFrame {
 	 */
 	public RobotCreation(int h, int w, ArrayList<DeliverRobot> robots, JPanel j, JComboBox<String> combox) {
 		setTitle("Create a Robot");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 500, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -91,7 +91,7 @@ public class RobotCreation extends JFrame {
 		errMsg.setForeground(Color.RED);
 		errMsg.setBackground(UIManager.getColor("Button.background"));
 		errMsg.setEditable(false);
-		errMsg.setBounds(152, 192, 272, 58);
+		errMsg.setBounds(271, 107, 203, 142);
 		contentPane.add(errMsg);
 		
 		
@@ -104,8 +104,8 @@ public class RobotCreation extends JFrame {
 					int pe = Integer.parseInt(eastField.getText());
 					String name = nameField.getText();
 			
-					if (ps < 0 || ps >= h || pe < 0 || pe >= w) {
-						errMsg.setText("Invalid input. Position is out of bounds.");
+					if (ps < 0 || ps >= h - 5 || pe < 0 || pe >= w - 5) {
+						errMsg.setText("Invalid input.\nPosition is out of bounds.");
 					}
 					else {
 						RobotFactory rf = RobotFactory.getFactory();
@@ -118,16 +118,25 @@ public class RobotCreation extends JFrame {
 						}
 						
 						boolean taken = false;
+						boolean badName = false;
 						//checks position
 						for(DeliverRobot var : robots) {
-							if(var.getE() == w && var.getS() == h) {
+							if(var.getE() == pe && var.getS() == ps) {
 								taken = true;
+								break;
+							}
+							if (dr.name.equals(var.name)) {
+								badName = true;
+								break;
 							}
 						}
 						
+						if(badName) {
+							errMsg.setText("That name is already being used.");
+						}
 						
-						if(taken) {
-							errMsg.setText("Invalid input. A robot is already located at that\n position.");
+						else if(taken) {
+							errMsg.setText("Invalid input. A robot is already\nlocated at that position.");
 						}
 						else {
 							robots.add(dr);
@@ -138,12 +147,18 @@ public class RobotCreation extends JFrame {
 					}
 				}
 				catch (NumberFormatException exception) {
-					errMsg.setText("Invalid input. Please enter basic integers with no spaces.");
+					errMsg.setText("Invalid input. Please enter\nbasic integers with no spaces.");
 				}
 			}
 		});
 		btnCreate.setBounds(312, 73, 89, 23);
 		contentPane.add(btnCreate);
+		
+		JTextArea txtrNameTheRobot = new JTextArea();
+		txtrNameTheRobot.setBackground(UIManager.getColor("Button.background"));
+		txtrNameTheRobot.setEditable(false);
+		txtrNameTheRobot.setText("name the robot");
+		txtrNameTheRobot.setBounds(152, 191, 116, 22);
+		contentPane.add(txtrNameTheRobot);
 	}
-	
 }

@@ -12,8 +12,6 @@ import java.awt.event.ActionEvent;
 public class MapEntry {
 
 	private JFrame frmCreateAMap;
-	private JTextField heightField;
-	private JTextField widthField;
 
 	/**
 	 * Launch the application.
@@ -48,35 +46,6 @@ public class MapEntry {
 		frmCreateAMap.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmCreateAMap.getContentPane().setLayout(null);
 		
-		JTextArea txtPrompt = new JTextArea();
-		txtPrompt.setEditable(false);
-		txtPrompt.setBackground(UIManager.getColor("Button.background"));
-		txtPrompt.setText("Please enter the dimensions for \r\nthe map you would like to create.");
-		txtPrompt.setBounds(10, 11, 269, 40);
-		frmCreateAMap.getContentPane().add(txtPrompt);
-		
-		heightField = new JTextField();
-		heightField.setBounds(95, 80, 96, 20);
-		frmCreateAMap.getContentPane().add(heightField);
-		heightField.setColumns(10);
-		
-		widthField = new JTextField();
-		widthField.setBounds(95, 140, 96, 20);
-		frmCreateAMap.getContentPane().add(widthField);
-		widthField.setColumns(10);
-		
-		JTextArea txtrUnitsOfHeight = new JTextArea();
-		txtrUnitsOfHeight.setBackground(UIManager.getColor("Button.background"));
-		txtrUnitsOfHeight.setText("units of height");
-		txtrUnitsOfHeight.setBounds(201, 78, 125, 22);
-		frmCreateAMap.getContentPane().add(txtrUnitsOfHeight);
-		
-		JTextArea txtrUnitsOfWeight = new JTextArea();
-		txtrUnitsOfWeight.setBackground(UIManager.getColor("Button.background"));
-		txtrUnitsOfWeight.setText("units of width");
-		txtrUnitsOfWeight.setBounds(201, 138, 125, 22);
-		frmCreateAMap.getContentPane().add(txtrUnitsOfWeight);
-		
 		JTextArea errMsg = new JTextArea();
 		errMsg.setEditable(false);
 		errMsg.setForeground(Color.RED);
@@ -84,30 +53,7 @@ public class MapEntry {
 		errMsg.setBounds(10, 225, 414, 53);
 		frmCreateAMap.getContentPane().add(errMsg);
 		
-		JButton btnCreate = new JButton("CREATE");
-		btnCreate.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				try {
-					int h = Integer.parseInt(heightField.getText());
-					int w = Integer.parseInt(widthField.getText());
-					if (h > 100 || h < 1 || w > 100 || w < 1) {
-						errMsg.setText("Invalid input. Height and width can only be from 1 to 100 inclusive.");
-					}
-					else {
-						frmCreateAMap.dispose();
-						ActualMap am = new ActualMap(h,w);
-						am.setVisible(true);
-					}
-					}
-					catch (NumberFormatException exception) {
-						errMsg.setText("Invalid input. Please enter basic integers with no spaces.");
-					}
-			}
-		});
-		btnCreate.setBounds(170, 171, 89, 23);
-		frmCreateAMap.getContentPane().add(btnCreate);
-		
-		JButton btnGSU = new JButton("GSU");
+		JButton btnGSU = new JButton("CREATE");
 		btnGSU.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frmCreateAMap.dispose();
@@ -118,7 +64,7 @@ public class MapEntry {
 					//l
 			}
 		});
-		btnGSU.setBounds(170, 200, 89, 23);
+		btnGSU.setBounds(170, 106, 89, 23);
 		frmCreateAMap.getContentPane().add(btnGSU);
 		
 		

@@ -13,6 +13,7 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
+import java.awt.Color;
 
 public class GSUMap extends JPanel {
 	JFrame f;
@@ -27,6 +28,7 @@ public class GSUMap extends JPanel {
 	ArrayList<DeliverRobot> robots;
 	DeliverRobot current;
 	public JComboBox<String> combox;
+	private JTextArea errMsg = new JTextArea();
 
 	// constructor to call INIT
 	public GSUMap() {
@@ -59,7 +61,7 @@ public class GSUMap extends JPanel {
 		g.drawRect(200, 200, 100, 100);
 		g.drawRect(0, 0, 1227, 768);
 		for(DeliverRobot var : robots) {
-			g.drawImage(var.robotSprite, (int) var.box.getX(), (int) var.box.getY(), null);
+			g.drawImage(var.robotSprite, var.getE(), var.getS(), null);
 		}
 
 	}
@@ -97,7 +99,7 @@ public class GSUMap extends JPanel {
 		JButton btnCreateRobot = new JButton("CREATE ROBOT");
 		btnCreateRobot.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				RobotCreation rc = new RobotCreation(1227, 768, robots, temp, combox);
+				RobotCreation rc = new RobotCreation(720, 1180, robots, temp, combox);
 				rc.setVisible(true);
 				repaint();					
 			}
@@ -126,13 +128,38 @@ public class GSUMap extends JPanel {
 		btnDelete.setBounds(1288, 110, 150, 25);
 		btnDelete.setFocusable(false);
 		this.add(btnDelete);
+		errMsg.setForeground(Color.RED);
+		
+		errMsg.setBackground(UIManager.getColor("Button.background"));
+		errMsg.setBounds(1288, 157, 150, 69);
+		add(errMsg);
+		
+		JButton btnTogglePower = new JButton("Toggle Power");
+		btnTogglePower.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (current == null) {
+					errMsg.setText("There is no robot selected.");
+					return;
+				}
+				errMsg.setText("");
+				if (current.isOn()) {
+					current.turnOff();
+				}
+				else {
+					current.turnOn();
+				}
+			}
+		});
+		btnTogglePower.setBounds(1308, 237, 119, 23);
+		add(btnTogglePower);
 		
 	}
 
 	// creates a JFrame
 	public void createFrame(int x, int y) {
 		f = new JFrame();
-		f.add(this);
+		f.setTitle("GSU Map");
+		f.getContentPane().add(this);
 		f.setSize(x, y);
 		f.setVisible(true);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -163,35 +190,100 @@ public class GSUMap extends JPanel {
 			
 			current.box.setLocation((int) current.box.getX(), (int) current.box.getY() - 5);
 			if (current.box.intersects(building)) {
-				System.out.println("collision");
+				errMsg.setText("Collision!");
 				current.box.setLocation((int) current.box.getX(), (int) current.box.getY() + 5);
-			} else {
-				repaint();
+			} 
+			
+			else if(!current.isOn()) {
+				errMsg.setText("This robot is not turned on.");
+				current.box.setLocation((int) current.box.getX(), (int) current.box.getY() + 5);
+			}
+			
+			else {
+				current.setS(current.getS() - 5);
+				if (current.getS() <= 0) {
+					errMsg.setText("Out of bounds!");
+					current.setS(current.getS() + 5);
+					current.box.setLocation((int) current.box.getX(), (int) current.box.getY() + 5);
+				}
+				else {
+					errMsg.setText("");
+					repaint();					
+				}
+
 			}
 		
 		} else if (c == 'S') {
 			current.box.setLocation((int) current.box.getX(), (int) current.box.getY() + 5);
 			if (current.box.intersects(building)) {
-				System.out.println("collision");
+				errMsg.setText("Collision!");
 				current.box.setLocation((int) current.box.getX(), (int) current.box.getY() - 5);
-			} else {
-				this.repaint();
+			} 
+			
+			else if(!current.isOn()) {
+				errMsg.setText("This robot is not turned on.");
+				current.box.setLocation((int) current.box.getX(), (int) current.box.getY() - 5);
+			}
+			
+			else {
+				current.setS(current.getS() + 5);
+				if (current.getS() >= 720) {
+					errMsg.setText("Out of bounds!");
+					current.setS(current.getS() - 5);
+					current.box.setLocation((int) current.box.getX(), (int) current.box.getY() - 5);
+				}
+				else {
+					errMsg.setText("");
+					repaint();					
+				}
 			}
 		} else if (c == 'A') {
 			current.box.setLocation((int) current.box.getX() - 5, (int) current.box.getY());
 			if (current.box.intersects(building)) {
-				System.out.println("collision");
+				errMsg.setText("Collision!");
 				current.box.setLocation((int) current.box.getX() + 5, (int) current.box.getY());
-			} else {
-				repaint();
+			} 
+			
+			else if(!current.isOn()) {
+				errMsg.setText("This robot is not turned on.");
+				current.box.setLocation((int) current.box.getX() + 5, (int) current.box.getY());
+			}
+			
+			else {
+				current.setE(current.getE() - 5);
+				if (current.getE() <= 0) {
+					errMsg.setText("Out of bounds!");
+					current.setE(current.getE() + 5);
+					current.box.setLocation((int) current.box.getX() + 5, (int) current.box.getY());
+				}
+				else {
+					errMsg.setText("");
+					repaint();					
+				}
 			}
 		} else if (c == 'D') {
 			current.box.setLocation((int) current.box.getX() + 5, (int) current.box.getY());
 			if (current.box.intersects(building)) {
-				System.out.println("collision");
+				errMsg.setText("Collision!");
 				current.box.setLocation((int) current.box.getX() - 5, (int) current.box.getY());
-			} else {
-				repaint();
+			} 
+			
+			else if(!current.isOn()) {
+				errMsg.setText("This robot is not turned on.");
+				current.box.setLocation((int) current.box.getX() - 5, (int) current.box.getY());
+			}
+			
+			else {
+				current.setE(current.getE() + 5);
+				if (current.getE() >= 1180) {
+					errMsg.setText("Out of bounds!");
+					current.setE(current.getE() - 5);
+					current.box.setLocation((int) current.box.getX() - 5, (int) current.box.getY());
+				}
+				else {
+					errMsg.setText("");
+					repaint();					
+				}
 			}
 		}
 	}
