@@ -151,6 +151,7 @@ public class GSUMap extends JPanel {
 			}
 		});
 		btnTogglePower.setBounds(1308, 237, 119, 23);
+		btnTogglePower.setFocusable(false);
 		add(btnTogglePower);
 		
 	}
