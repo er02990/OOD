@@ -107,6 +107,9 @@ public class RobotCreation extends JFrame {
 					if (ps < 0 || ps >= h - 5 || pe < 0 || pe >= w - 5) {
 						errMsg.setText("Invalid input.\nPosition is out of bounds.");
 					}
+					else if (ps > 150 && ps < 300 && pe > 150 && pe < 300) {
+						errMsg.setText("You cannot create a robot\ninside the building.\nThe building is from 150-300 units\nE and S, exclusive.");
+					}
 					else {
 						RobotFactory rf = RobotFactory.getFactory();
 						if (Power.isSelected()) {
@@ -125,7 +128,7 @@ public class RobotCreation extends JFrame {
 								taken = true;
 								break;
 							}
-							if (dr.name.equals(var.name)) {
+							if (dr.getName().equals(var.getName())) {
 								badName = true;
 								break;
 							}

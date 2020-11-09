@@ -15,7 +15,7 @@ public class DeliverRobot {
 	Rectangle box;
 	Image robotImage;
 	BufferedImage robotSprite;
-	public String name;
+	private String name;
 	
 //when created this robot will have a starting position and power state	
 	public DeliverRobot(int S, int E, boolean on, String name) {
@@ -209,4 +209,9 @@ public class DeliverRobot {
 	public boolean isOn() {
 		return on;
 	}
+	
+	public String getName() {
+		return name;
+	}
+	
 }
