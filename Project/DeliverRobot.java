@@ -24,7 +24,7 @@ public class DeliverRobot {
 		this.on = on;
 		this.name = name;
 		
-		box = new Rectangle(S, E, 50, 50);
+		box = new Rectangle(E, S, 50, 50);
 		getImages("res\\robot.png");
 	}
 	
