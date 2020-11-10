@@ -14,6 +14,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
 import java.awt.Color;
+import java.awt.Font;
 
 public class GSUMap extends JPanel {
 	private JFrame f;
@@ -26,12 +27,15 @@ public class GSUMap extends JPanel {
 	//BufferedImage robotSprite;
 	//private DeliverRobot[] robots;
 	private ArrayList<DeliverRobot> robots;
-	private DeliverRobot current;
-	private JComboBox<String> combox;
+	DeliverRobot current;
+	JComboBox<String> combox;
 	private JTextArea errMsg = new JTextArea();
+	private GSUMap entireMap;
+	private boolean running;
 
 	// constructor to call INIT
 	public GSUMap() {
+		entireMap = this;
 		init();
 	}
 
@@ -74,6 +78,7 @@ public class GSUMap extends JPanel {
 		DefaultComboBoxModel<String> dml= new DefaultComboBoxModel<String>();
 		for (DeliverRobot var : robots) {
 		  dml.addElement(var.getName());
+		  errMsg.setText("");
 		}
 		
 		combox.setModel(dml);
@@ -83,6 +88,7 @@ public class GSUMap extends JPanel {
 				for(DeliverRobot temp : robots) {
 					if(temp.getName() == combox.getSelectedItem()) {
 						current = temp;
+						errMsg.setText("");
 						System.out.println(current);
 					}
 				}
@@ -122,12 +128,16 @@ public class GSUMap extends JPanel {
 					current = null;
 					repaint();	
 				}
+				else {
+					errMsg.setText("There is no robot selected.");
+				}
 								
 			}
 		});
 		btnDelete.setBounds(1288, 110, 150, 25);
 		btnDelete.setFocusable(false);
 		this.add(btnDelete);
+		errMsg.setEditable(false);
 		errMsg.setForeground(Color.RED);
 		
 		errMsg.setBackground(UIManager.getColor("Button.background"));
@@ -153,6 +163,86 @@ public class GSUMap extends JPanel {
 		btnTogglePower.setBounds(1308, 237, 119, 23);
 		btnTogglePower.setFocusable(false);
 		add(btnTogglePower);
+		
+		//this button will use the RobotFacade class to easily move all robots to the north east corner
+		JButton NEButton = new JButton("ALL NE");
+		NEButton.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		NEButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RobotFacade rf = new RobotFacade(entireMap, robots, errMsg);
+				try {
+					running = true;
+					rf.moveAllNE();
+					running = false;
+				} catch (InterruptedException e1) {
+					running = false;
+					e1.printStackTrace();
+				}
+			}
+		});
+		NEButton.setFocusable(false);
+		NEButton.setBounds(1373, 300, 79, 37);
+		add(NEButton);
+		
+		//this button will use the RobotFacade class to easily move all robots to the north west corner
+		JButton NWButton = new JButton("ALL NW");
+		NWButton.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		NWButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RobotFacade rf = new RobotFacade(entireMap, robots, errMsg);
+				try {
+					running = true;
+					rf.moveAllNW();
+					running = false;
+				} catch (InterruptedException e1) {
+					running = false;
+					e1.printStackTrace();
+				}
+			}
+		});
+		NWButton.setFocusable(false);
+		NWButton.setBounds(1284, 300, 79, 37);
+		add(NWButton);
+		
+		//this button will use the RobotFacade class to easily move all robots to the south east corner
+		JButton SEButton = new JButton("ALL SE");
+		SEButton.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		SEButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RobotFacade rf = new RobotFacade(entireMap, robots, errMsg);
+				try {
+					running = true;
+					rf.moveAllSE();
+					running = false;
+				} catch (InterruptedException e1) {
+					running = false;
+					e1.printStackTrace();
+				}
+			}
+		});
+		SEButton.setFocusable(false);
+		SEButton.setBounds(1373, 348, 79, 37);
+		add(SEButton);
+		
+		//this button will use the RobotFacade class to easily move all robots to the south west corner
+		JButton SWButton = new JButton("ALL SW");
+		SWButton.setFont(new Font("Tahoma", Font.PLAIN, 11));
+		SWButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RobotFacade rf = new RobotFacade(entireMap, robots, errMsg);
+				try {
+					running = true;
+					rf.moveAllSW();
+					running = false;
+				} catch (InterruptedException e1) {
+					running = false;
+					e1.printStackTrace();
+				}
+			}
+		});
+		SWButton.setFocusable(false);
+		SWButton.setBounds(1284, 348, 79, 37);
+		add(SWButton);
 		
 	}
 
@@ -185,6 +275,8 @@ public class GSUMap extends JPanel {
 	// move method that will determine what movement key was pressed
 	//uses the currents robots boxes locations. could be switched to changing the robots cords
 	//and updating the box location in the robot
+	//depending on the key pressed the appropriate button press class will be created and used
+	//if the button class used successfully moved the current robot then the map needs to be repainted
 	public void move(String s) {
 		char c = s.charAt(0);
 		boolean ans = false;
@@ -212,7 +304,7 @@ public class GSUMap extends JPanel {
 		}
 		
 		if (ans) {
-			repaint();
+			paintImmediately(0, 0, 1484, 769);
 		}
 	}
 
@@ -224,8 +316,14 @@ public class GSUMap extends JPanel {
 
 		@Override
 		public void keyPressed(KeyEvent e) {
-			if(current != null) {
+			if (running) {
+				e.consume();
+			}
+			else if(current != null) {
 				move(KeyEvent.getKeyText(e.getKeyCode()));
+			}
+			else {
+				errMsg.setText("There is no robot selected.");
 			}
 		}
 
@@ -234,6 +332,4 @@ public class GSUMap extends JPanel {
 		}
 
 	}
-	
-	
 }

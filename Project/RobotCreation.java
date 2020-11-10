@@ -104,7 +104,7 @@ public class RobotCreation extends JFrame {
 					int pe = Integer.parseInt(eastField.getText());
 					String name = nameField.getText();
 			
-					if (ps < 0 || ps >= h - 5 || pe < 0 || pe >= w - 5) {
+					if (ps < 5 || ps >= h - 5 || pe < 5 || pe >= w - 5) {
 						errMsg.setText("Invalid input.\nPosition is out of bounds.");
 					}
 					else if (ps > 150 && ps < 300 && pe > 150 && pe < 300) {

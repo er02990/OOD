@@ -3,6 +3,8 @@ import java.awt.Rectangle;
 import javax.swing.JTextArea;
 
 public class SButtonPress extends ButtonPress {
+//this class represents the S key being pressed
+//it attempts to move the robot to the south, so the number of units south will increase if it successfully moves a robot
 
 	public SButtonPress(DeliverRobot current, Rectangle building, JTextArea errMsg) {
 		super(current, building, errMsg);

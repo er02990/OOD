@@ -3,7 +3,9 @@ import java.awt.Rectangle;
 import javax.swing.JTextArea;
 
 public class WButtonPress extends ButtonPress {
-
+//this class represents the W key being pressed
+//it attempts to move the robot to the north, so the number of units south will decrease if it successfully moves a robot
+	
 	public WButtonPress(DeliverRobot current, Rectangle building, JTextArea errMsg) {
 		super(current, building, errMsg);
 	}
